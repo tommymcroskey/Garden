@@ -25,7 +25,7 @@ public:
 	{}
 
 	Vector(size_t capacity)
-		: data_(static_cast<T*>(::operator new(capacity * sizeof(T))))
+		: data_(static_cast<T*>(::operator new((capacity > default_capacity ? capacity : default_capacity) * sizeof(T))))
 		, capacity_(capacity)
 		, size_(0)
 	{}

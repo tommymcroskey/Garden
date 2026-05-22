@@ -87,6 +87,7 @@ void run_tests() {
 	test_ud_capacity_constructor();
 	test_ud_fill_constructor();
 	test_ud_push_back();
+	test_zero_cap_insert();
 }
 
 int main() {
