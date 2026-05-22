@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <memory>
+#include <utility>
 
 namespace gdn {
 inline namespace _circular_buffer_0_1_0 {
@@ -21,10 +22,15 @@ CircularBuffer() :
 {}
 ~CircularBuffer() = default;
 
-void enqueue(T e) {
-	if (full()) {
-		throw std::overflow_error("circular buffer is full");
-	}
+void enqueue(const T& e) {
+	_full_check_throw();
+	data[front_] = e;
+	front_ = (front_ + 1) % capacity_;
+	size_++;
+}
+
+void enqueue(T&& e) {
+	_full_check_throw();
 	data[front_] = std::move(e);
 	front_ = (front_ + 1) % capacity_;
 	size_++;
@@ -53,6 +59,12 @@ size_t front_;
 size_t back_;
 
 T data[N];
+
+void _full_check_throw() {
+	if (full()) {
+		throw std::overflow_error("circular buffer is full");
+	}
+}
 
 };
 
