@@ -77,6 +77,16 @@ void test_zero_cap_insert() {
 	assert(v.size() == 2);
 }
 
+void test_zero_cap_fill_insert() {
+	gdn::Vector<int> v(0, 25);
+	for (int i = 0; i < 100; i++) {
+		v.push_back(i);
+	}
+	assert(v.size() == 100);
+	assert(v.front() == 0);
+	assert(v.back() == 99);
+}
+
 void run_tests() {
 	test_constructor_sanity();
 	test_push_back_trivial();
@@ -88,6 +98,7 @@ void run_tests() {
 	test_ud_fill_constructor();
 	test_ud_push_back();
 	test_zero_cap_insert();
+	test_zero_cap_fill_insert();
 }
 
 int main() {
