@@ -25,12 +25,14 @@ public:
 	{}
 
 	Vector(size_t capacity)
-		: data_(static_cast<T*>(::operator new((capacity > default_capacity ? capacity : default_capacity) * sizeof(T))))
+		: data_(static_cast<T*>(::operator new((capacity > default_capacity ? capacity
+		: default_capacity) * sizeof(T))))
 		, capacity_(capacity)
 		, size_(0)
 	{}
 
-	Vector(size_t capacity, const T& fill) : Vector(capacity) {
+	Vector(size_t capacity, const T& fill)
+		: Vector((capacity > default_capacity ? capacity : default_capacity)) {
 		for (; size_ < capacity_; size_++) {
 			new (data_ + size_) T(fill);
 		}
