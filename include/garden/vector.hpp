@@ -25,13 +25,15 @@ public:
 	{}
 
 	Vector(size_t capacity)
-		: data_(static_cast<T*>(::operator new(capacity * sizeof(T))))
+		: data_(static_cast<T*>(::operator new((capacity > default_capacity ? capacity
+		: default_capacity) * sizeof(T))))
 		, capacity_(capacity)
 		, size_(0)
 	{}
 
-	Vector(size_t capacity, const T& fill) : Vector(capacity) {
-		for (; size_ < capacity_; size_++) {
+	Vector(size_t capacity, const T& fill)
+		: Vector(capacity) {
+		for (; size_ < capacity; size_++) {
 			new (data_ + size_) T(fill);
 		}
 	}
@@ -148,7 +150,6 @@ private:
 		if (capacity_ * 2 < capacity_) {
 			throw std::bad_alloc();
 		}
-		capacity_ *= 2;
 		if (std::is_trivially_copyable<T>::value) {
 			_tc_expand_exponential();
 		} else {
@@ -160,6 +161,7 @@ private:
 	* @brief expand vector of user-defined type, no optimization
 	*/
 	void _ud_expand_exponential() {
+		capacity_ <<= 1;
 		T* ptr = static_cast<T*>(::operator new(capacity_ * sizeof(T)));
 		for (size_t i = 0; i < size_; i++) {
 			new (ptr + i) T(std::move(data_[i]));
@@ -173,6 +175,7 @@ private:
 	* @brief expand vector of trivially copyable type, using realloc optimization
 	*/
 	void _tc_expand_exponential() {
+		capacity_ <<= 1;
 		T* ptr = static_cast<T*>(realloc(data_, capacity_ * sizeof(T)));
 		if (ptr == nullptr) {
 			throw std::bad_alloc();

@@ -13,7 +13,8 @@ foreach(TEST_FILE
     tests/test_vector.cpp
     tests/test_stack.cpp
     tests/test_circular_buffer.cpp
-    tests/test_merge_sort.cpp)
+    tests/test_merge_sort.cpp
+    )
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
     add_executable(${TEST_NAME} ${TEST_FILE})
     target_link_libraries(${TEST_NAME} PRIVATE garden)
